@@ -2,6 +2,10 @@
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
     xmlns="sap.m">
     <Page id="page" title="{i18n>title}">
-        <content />
+        <List headerText="Products" headerLevel="H1" id="list1">
+            <StandardListItem title="Produto 1" counter="7" id="product1"/>
+            <StandardListItem title="Produto 2" counter="10" id="product2"/>
+            <StandardListItem title="Produto 3" counter="5" id="product3"/>
+        </List>
     </Page>
 </mvc:View>
