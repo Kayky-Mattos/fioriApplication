@@ -3,9 +3,11 @@
     xmlns="sap.m">
     <Page id="page" title="{i18n>title}">
         <List headerText="Products" headerLevel="H1" id="list1">
-            <StandardListItem title="Produto 1" counter="7" id="product1"/>
-            <StandardListItem title="Produto 2" counter="10" id="product2"/>
-            <StandardListItem title="Produto 3" counter="5" id="product3"/>
+            <StandardListItem title="Rice" counter="5" id="product1"/>
+            <StandardListItem title="Beans" counter="8" id="product2"/>
+            <StandardListItem title="Pasta" counter="10" id="product3"/>
+            <StandardListItem title="Oil" counter="2" id="product4"/>
+            <StandardListItem title="Milk" counter="9" id="product5"/>
         </List>
     </Page>
 </mvc:View>
