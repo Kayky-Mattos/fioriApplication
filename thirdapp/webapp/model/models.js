@@ -22,8 +22,8 @@ sap.ui.define(
         return oModel;
       },
 
-      readProducts: function () {
-        return connector.get("/Products").then(function (response) {
+      readProducts: function (oURLParam) {
+        return connector.get("/Products",oURLParam).then(function (response) {
           return response.results;
         });
       },

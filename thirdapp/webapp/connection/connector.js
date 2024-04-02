@@ -65,9 +65,10 @@ sap.ui.define(["sap/ui/model/odata/v2/ODataModel"], function (ODataModel) {
     //   );
     },
 
-    get: function (sPath) {
+    get: function (sPath,oURLParam) {
       return new Promise((resolve, reject) => {
         this._oDataModel.read(sPath, {
+          ...oURLParam,
           success: function (oData, oResponse) {
             resolve(oData, oResponse);
           },

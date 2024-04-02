@@ -6,6 +6,8 @@ sap.ui.define(
     "sap/ui/model/json/JSONModel",
     "sap/ui/model/odata/v2/ODataModel",
     "com/lab2dev/thirdapp/model/models",
+    "sap/ui/model/Filter",
+    "sap/ui/model/FilterOperator"
   ],
   /**
    * @param {typeof sap.ui.core.mvc.Controller} Controller
@@ -16,12 +18,15 @@ sap.ui.define(
     MessageBox,
     JSONModel,
     ODataModel,
-    models
+    models,
+    Filter,
+    FilterOperator,
   ) {
     "use strict";
 
     return Controller.extend("com.lab2dev.thirdapp.controller.Home", {
       onInit: function () {
+
         const oRouter = this.getRouter();
         oRouter.getRoute("Home").attachMatched(this.onRouteLoad, this);
 
@@ -64,7 +69,14 @@ sap.ui.define(
         // this.getView().setModel(oModel, "products");
       },
       onRouteLoad: function () {
-        const pService = models.readProducts();
+
+        const params = {
+          urlParameters: {
+            $expand: "Category"
+          }
+        };
+
+        const pService = models.readProducts(params);
         pService
           .then((response) => {
             console.log(response);
@@ -72,7 +84,7 @@ sap.ui.define(
             this.getView().setModel(oModel, "Products");
           })
           .catch((err) => {
-            console.log(err);
+            MessageBox.error("O Serviço está indisponível!");
           });
       },
       //Lista de produtos
@@ -84,12 +96,55 @@ sap.ui.define(
         //Titulo do item
         const itemTitle = item.getTitle();
 
+        const i18n = this.getOwnerComponent().getModel("i18n").getSourceBundle();
+
+        const message = i18n.getText("itemClicked", [itemTitle]);
         //Mensagem a ser exibida
-        const message = `The item: "${itemTitle}" was clicked`;
+        // const message = `The item: "${itemTitle}" ${clicked}`;
 
         //Exibe uma mensagem na tela
         MessageBox.information(message);
       },
+      onSearch: function (oEvent) {
+                // add filter for search
+                const aFilters = [];
+                const sQuery = oEvent.getSource().getValue();
+
+                if (sQuery && sQuery.length > 0) {
+                    const filter = new Filter("ProductName", FilterOperator.Contains, sQuery);
+                    aFilters.push(filter);
+                }
+
+                // update list binding
+                const oList = this.byId("list");
+                const oBinding = oList.getBinding("items");
+                oBinding.filter(aFilters);
+            },
+
+            onSearchOData: function (oEvent) {
+                const sQuery = oEvent.getSource().getValue();
+
+                const params = {
+                    urlParameters: {
+                        $expand: "Category"
+                    },
+                    filters: [
+                        new Filter("ProductName", FilterOperator.Contains, sQuery)
+                    ]
+                };
+
+                const products = models.readProducts(params);
+
+                products
+                    .then((oProductsModel) => {
+                        this.getView().setModel(oProductsModel, 'Products');
+
+                    }).catch((oError) => {
+                        MessageBox.error(oError);
+
+                    });
+            },
     });
+    
   }
 );

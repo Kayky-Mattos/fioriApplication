@@ -1,9 +1,31 @@
-<mvc:View controllerName="com.lab2dev.thirdapp.controller.Home"
-    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+<mvc:View 
+    controllerName="com.lab2dev.thirdapp.controller.Home"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
     xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
+    <Page
+    id="page"
+    title="{i18n>title}">
+   
+    <subHeader>
+        <Toolbar id="toolb1">
+            <SearchField
+                id="searchField"
+                liveChange="onSearch"
+                width="50%"
+                placeholder="{i18n>searchPlaceholder}"
+            />
+            <SearchField
+                id="searchFieldoData"
+                search="onSearchoData"
+                width="50%"
+                placeholder="{i18n>searchPlaceholder}"
+            />
+        </Toolbar>
+    </subHeader>  
+
     <content>
-        <List headerText="Products" headerLevel="H1" items="{Products>/}" id="list1">
+        <List headerText="Products" headerLevel="H1" items="{Products>/}" id="list">
             <!-- <StandardListItem 
                               type="Active"
                               press="onPress"
@@ -11,22 +33,23 @@
                               counter="{products>counter}"
                               id="listitem1" /> -->
 
-                              <ObjectListItem 
-                              title="{Products>ProductName}"
-                              number="{Products>UnitPrice}"
-                              numberUnit="USD"
-                              id="objlistitm1"
-                              >
-                              <firstStatus>
-                              <ObjectStatus 
-                              text="{products>Discontinued}"
-                              state="Success"
-                              id="objstt1"
-                              />
-                              </firstStatus>
-                              <ObjectAttribute  text="{Products>UnitsInStock} in Stock" id="objatrib1" />
-                              <ObjectAttribute  text="{Products>QuantityPerUnit}" id="objatrib2" />
-                              </ObjectListItem>
+            <ObjectListItem 
+                title="{Products>ProductName}"
+                number="{Products>UnitPrice}"
+                numberUnit="USD"
+                id="objlistitm1"
+            >
+                <firstStatus>
+                    <ObjectStatus 
+                        text="{products>Discontinued}"
+                        state="Success"
+                        id="objstt1"
+                    />
+                </firstStatus>
+                    <ObjectAttribute  text="{Products>UnitsInStock} in Stock" id="objatrib1" />
+                    <ObjectAttribute  text="{Products>Category/CategoryName}" id="objatrib2"/>
+                    <ObjectAttribute  text="{Products>QuantityPerUnit}" id="objatrib3" />
+            </ObjectListItem>
         </List>
         </content>
     </Page>
