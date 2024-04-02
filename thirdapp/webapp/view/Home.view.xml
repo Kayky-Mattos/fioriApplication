@@ -3,7 +3,7 @@
     xmlns="sap.m">
     <Page id="page" title="{i18n>title}">
     <content>
-        <List headerText="Products" headerLevel="H1" items="{products>/}" id="list1">
+        <List headerText="Products" headerLevel="H1" items="{Products>/}" id="list1">
             <!-- <StandardListItem 
                               type="Active"
                               press="onPress"

@@ -68,6 +68,8 @@ sap.ui.define(
         pService
           .then((response) => {
             console.log(response);
+            const oModel = new JSONModel(response);
+            this.getView().setModel(oModel, "Products");
           })
           .catch((err) => {
             console.log(err);

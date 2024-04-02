@@ -10,7 +10,7 @@ sap.ui.define(["sap/ui/model/odata/v2/ODataModel"], function (ODataModel) {
       this._oComponent = oComponent;
       const resolveUrl = oComponent
         .getManifestObject()
-        .resolveUri("https://services.odata.org/V2/Northwind/Northwind.svc/");
+        .resolveUri("/northwind/northwind.svc/");
 
       this._oDataModel = new sap.ui.model.odata.v2.ODataModel(resolveUrl, {
         defaultUpdateMethod: sap.ui.model.odata.UpdateMethod.put,
