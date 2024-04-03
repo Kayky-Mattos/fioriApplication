@@ -25,7 +25,18 @@
     </subHeader>  
 
     <content>
-        <List headerText="Products" headerLevel="H1" items="{Products>/}" id="list">
+        <List   
+                headerText="{i18n>Products}"
+                headerLevel="H2"
+                items="{
+                    path: 'Products>/',
+                    sorter: {
+                        path:'Category/CategoryName',
+                        group: true,
+                        descending: false
+                    }
+                }" 
+                id="list">
             <!-- <StandardListItem 
                               type="Active"
                               press="onPress"
@@ -34,20 +45,38 @@
                               id="listitem1" /> -->
 
             <ObjectListItem 
-                title="{Products>ProductName}"
+                title="{
+                    path: 'Products>ProductName',
+                    formatter:'.formatter.toUpperCase'
+                    }"
                 number="{Products>UnitPrice}"
+                numberState="{= ${Products>UnitPrice} > 15 ? 'Error' : 'Success'}"
                 numberUnit="USD"
+                type="Active"
+                press="onPress"
                 id="objlistitm1"
             >
                 <firstStatus>
                     <ObjectStatus 
-                        text="{products>Discontinued}"
-                        state="Success"
+                        text="{
+                            parts: [
+                            {path: 'Products>UnitsInStock'},
+                            {path: 'Products>UnitsOnOrder'}
+                            ],
+                            formatter: '.formatter.checkStockText'
+                        }"
+                        state="{
+                            parts: [
+                            {path: 'Products>UnitsInStock'},
+                            {path: 'Products>UnitsOnOrder'}
+                            ],
+                            formatter: '.formatter.checkStockState'
+                        }"
                         id="objstt1"
                     />
                 </firstStatus>
-                    <ObjectAttribute  text="{Products>UnitsInStock} in Stock" id="objatrib1" />
                     <ObjectAttribute  text="{Products>Category/CategoryName}" id="objatrib2"/>
+                    <ObjectAttribute  text="{Products>UnitsInStock} in Stock" id="objatrib1" />
                     <ObjectAttribute  text="{Products>QuantityPerUnit}" id="objatrib3" />
             </ObjectListItem>
         </List>

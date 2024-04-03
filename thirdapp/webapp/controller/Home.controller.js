@@ -6,6 +6,7 @@ sap.ui.define(
     "sap/ui/model/json/JSONModel",
     "sap/ui/model/odata/v2/ODataModel",
     "com/lab2dev/thirdapp/model/models",
+    "com/lab2dev/thirdapp/model/formatter",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator"
   ],
@@ -19,12 +20,14 @@ sap.ui.define(
     JSONModel,
     ODataModel,
     models,
+    formatter,
     Filter,
     FilterOperator,
   ) {
     "use strict";
 
     return Controller.extend("com.lab2dev.thirdapp.controller.Home", {
+      formatter: formatter,
       onInit: function () {
 
         const oRouter = this.getRouter();
@@ -77,6 +80,10 @@ sap.ui.define(
         };
 
         const pService = models.readProducts(params);
+
+        const list = this.byId("list");
+
+        list.setBusy(true);
         pService
           .then((response) => {
             console.log(response);
@@ -85,6 +92,9 @@ sap.ui.define(
           })
           .catch((err) => {
             MessageBox.error("O Serviço está indisponível!");
+          })
+          .finally(() => {
+            list.setBusy(false);
           });
       },
       //Lista de produtos
@@ -96,7 +106,7 @@ sap.ui.define(
         //Titulo do item
         const itemTitle = item.getTitle();
 
-        const i18n = this.getOwnerComponent().getModel("i18n").getSourceBundle();
+        const i18n = this.getOwnerComponent().getModel("i18n").getResourceBundle();
 
         const message = i18n.getText("itemClicked", [itemTitle]);
         //Mensagem a ser exibida
@@ -121,9 +131,9 @@ sap.ui.define(
                 oBinding.filter(aFilters);
             },
 
-            onSearchOData: function (oEvent) {
+            onSearchoData: function (oEvent) {
                 const sQuery = oEvent.getSource().getValue();
-
+                const list = this.byId("list");
                 const params = {
                     urlParameters: {
                         $expand: "Category"
@@ -137,11 +147,14 @@ sap.ui.define(
 
                 products
                     .then((oProductsModel) => {
-                        this.getView().setModel(oProductsModel, 'Products');
+                      const oModel = new JSONModel(oProductsModel);
+                        this.getView().setModel(oModel,'Products');
 
                     }).catch((oError) => {
                         MessageBox.error(oError);
 
+                    }).finally(() => {
+                      list.setBusy(false);
                     });
             },
     });
