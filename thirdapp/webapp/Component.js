@@ -7,7 +7,7 @@ sap.ui.define(
     "sap/ui/core/UIComponent",
     "sap/ui/Device",
     "com/lab2dev/thirdapp/model/models",
-    "com/lab2dev/thirdapp/connection/connector"
+    "com/lab2dev/thirdapp/connection/connector",
   ],
   function (UIComponent, Device, models, connector) {
     "use strict";
@@ -25,10 +25,10 @@ sap.ui.define(
       init: function () {
         // call the base component's init function
         UIComponent.prototype.init.apply(this, arguments);
-        // set the device model
-        this.setModel(models.createDeviceModel(), "device");
         // enable routing
         this.getRouter().initialize();
+        // set the device model
+        this.setModel(models.createDeviceModel(), "device");
 
         connector.init(this);
       },

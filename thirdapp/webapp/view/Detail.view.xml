@@ -5,7 +5,9 @@
     xmlns="sap.m">
     <Page 
         id="page"
-        title="{i18n>detailTitle}"
+        title="Product {detailView>/productId}"
+        showNavButton="true"
+        navButtonPress=".onNavBack"
     >
 
         <content />

@@ -67,10 +67,7 @@
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
           "bundleName": "com.lab2dev.thirdapp.i18n.i18n",
-          "supportedLocales": [
-            "",
-            "pt_BR"
-          ]
+          "supportedLocales": ["", "pt_BR"]
         }
       },
       "": {
@@ -98,9 +95,14 @@
       },
       "routes": [
         {
-          "name": "Home",
-          "pattern": ":?query:",
+          "name": "RouteHome",
+          "pattern": "",
           "target": ["TargetHome"]
+        },
+        {
+          "name": "RouteDetail",
+          "pattern": "detail/{productId}",
+          "target": ["TargetDetail"]
         }
       ],
       "targets": {
@@ -110,6 +112,13 @@
           "clearControlAggregation": false,
           "viewId": "Home",
           "viewName": "Home"
+        },
+        "TargetDetail": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "Detail",
+          "viewName": "Detail"
         }
       }
     },

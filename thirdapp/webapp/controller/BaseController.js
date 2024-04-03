@@ -86,7 +86,7 @@ sap.ui.define(
         if (sPreviousHash !== undefined) {
           window.history.back();
         } else {
-          this.getRouter().navTo("HomePage", {}, true /*no history*/);
+          this.getRouter().navTo("RouteHome", {}, true /*no history*/);
         }
       },
 
@@ -135,6 +135,11 @@ sap.ui.define(
           actions: ["OK"],
           details: sErrorDetails,
         });
+      },
+      navTo: function (sRouteName, oParameters) {
+        const params = oParameters || {};
+
+        this.getOwnerComponent().getRouter().navTo(sRouteName, params);
       },
 
       onNavTo: function (event) {

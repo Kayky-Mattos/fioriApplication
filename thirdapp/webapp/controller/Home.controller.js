@@ -30,7 +30,7 @@ sap.ui.define(
       formatter: formatter,
       onInit: function () {
         const oRouter = this.getRouter();
-        oRouter.getRoute("Home").attachMatched(this.onRouteLoad, this);
+        oRouter.getRoute("RouteHome").attachMatched(this.onRouteLoad, this);
 
         // const oDataModel = new ODataModel(
         //   "https://services.odata.org/V2/Northwind/Northwind.svc/"
@@ -98,22 +98,50 @@ sap.ui.define(
       //Lista de produtos
 
       onPress: function (oEvent) {
-        //Origem do evento
-        const item = oEvent.getSource();
+        //Origem do evento, item da lista
+        const source = oEvent.getSource();
 
-        //Titulo do item
-        const itemTitle = item.getTitle();
+        //Contexto do item da lista, o nome do model
+        const context = source.getBindingContext("Products");
 
-        const i18n = this.getOwnerComponent()
-          .getModel("i18n")
-          .getResourceBundle();
+        //Index do item da lista
+        const path = context.getPath();
 
-        const message = i18n.getText("itemClicked", [itemTitle]);
-        //Mensagem a ser exibida
-        // const message = `The item: "${itemTitle}" ${clicked}`;
+        //Acesso ao objeto do item da lista pelo path
+        const product = context.getObject(path);
 
-        //Exibe uma mensagem na tela
-        MessageBox.information(message);
+        //Acesso ao ID do produto
+        const productId = product.ProductID;
+
+        //Acesso ao Component
+        const oComponent = this.getOwnerComponent();
+
+        //Acesso ao Router
+        const oRouter = oComponent.getRouter();
+
+        //Navegação para a rota RouteDetail
+        //O Objeto do segundo parâmetro deo navTo é um objeto que a chave é o parâmetro
+        //configurado no pattern da rota RouteDetail e o valor é número do ProductId
+        this.navTo("RouteDetail", {
+          productId: productId,
+        });
+
+        // //Origem do evento
+        // const item = oEvent.getSource();
+
+        // //Titulo do item
+        // const itemTitle = item.getTitle();
+
+        // const i18n = this.getOwnerComponent()
+        //   .getModel("i18n")
+        //   .getResourceBundle();
+
+        // const message = i18n.getText("itemClicked", [itemTitle]);
+        // //Mensagem a ser exibida
+        // // const message = `The item: "${itemTitle}" ${clicked}`;
+
+        // //Exibe uma mensagem na tela
+        // MessageBox.information(message);
       },
       onSearch: function (oEvent) {
         // add filter for search
