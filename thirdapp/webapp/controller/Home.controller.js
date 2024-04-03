@@ -8,7 +8,7 @@ sap.ui.define(
     "com/lab2dev/thirdapp/model/models",
     "com/lab2dev/thirdapp/model/formatter",
     "sap/ui/model/Filter",
-    "sap/ui/model/FilterOperator"
+    "sap/ui/model/FilterOperator",
   ],
   /**
    * @param {typeof sap.ui.core.mvc.Controller} Controller
@@ -22,14 +22,13 @@ sap.ui.define(
     models,
     formatter,
     Filter,
-    FilterOperator,
+    FilterOperator
   ) {
     "use strict";
 
     return Controller.extend("com.lab2dev.thirdapp.controller.Home", {
       formatter: formatter,
       onInit: function () {
-
         const oRouter = this.getRouter();
         oRouter.getRoute("Home").attachMatched(this.onRouteLoad, this);
 
@@ -72,11 +71,10 @@ sap.ui.define(
         // this.getView().setModel(oModel, "products");
       },
       onRouteLoad: function () {
-
         const params = {
           urlParameters: {
-            $expand: "Category"
-          }
+            $expand: "Category",
+          },
         };
 
         const pService = models.readProducts(params);
@@ -106,7 +104,9 @@ sap.ui.define(
         //Titulo do item
         const itemTitle = item.getTitle();
 
-        const i18n = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+        const i18n = this.getOwnerComponent()
+          .getModel("i18n")
+          .getResourceBundle();
 
         const message = i18n.getText("itemClicked", [itemTitle]);
         //Mensagem a ser exibida
@@ -116,48 +116,69 @@ sap.ui.define(
         MessageBox.information(message);
       },
       onSearch: function (oEvent) {
-                // add filter for search
-                const aFilters = [];
-                const sQuery = oEvent.getSource().getValue();
+        // add filter for search
+        const aFilters = [];
+        const sQuery = oEvent.getSource().getValue();
 
-                if (sQuery && sQuery.length > 0) {
-                    const filter = new Filter("ProductName", FilterOperator.Contains, sQuery);
-                    aFilters.push(filter);
-                }
+        if (sQuery && sQuery.length > 0) {
+          const filter = new Filter(
+            "ProductName",
+            FilterOperator.Contains,
+            sQuery
+          );
+          aFilters.push(filter);
+        }
 
-                // update list binding
-                const oList = this.byId("list");
-                const oBinding = oList.getBinding("items");
-                oBinding.filter(aFilters);
-            },
+        // update list binding
+        const oList = this.byId("list");
+        const oBinding = oList.getBinding("items");
+        oBinding.filter(aFilters);
+      },
 
-            onSearchoData: function (oEvent) {
-                const sQuery = oEvent.getSource().getValue();
-                const list = this.byId("list");
-                const params = {
-                    urlParameters: {
-                        $expand: "Category"
-                    },
-                    filters: [
-                        new Filter("ProductName", FilterOperator.Contains, sQuery)
-                    ]
-                };
+      onSearchoData: function (oEvent) {
+        const sQuery = oEvent.getSource().getValue();
+        const list = this.byId("list");
+        const params = {
+          urlParameters: {
+            $expand: "Category",
+          },
+          filters: [new Filter("ProductName", FilterOperator.Contains, sQuery)],
+        };
 
-                const products = models.readProducts(params);
+        const products = models.readProducts(params);
 
-                products
-                    .then((oProductsModel) => {
-                      const oModel = new JSONModel(oProductsModel);
-                        this.getView().setModel(oModel,'Products');
+        products
+          .then((oProductsModel) => {
+            const oModel = new JSONModel(oProductsModel);
+            this.getView().setModel(oModel, "Products");
+          })
+          .catch((oError) => {
+            MessageBox.error(oError);
+          })
+          .finally(() => {
+            list.setBusy(false);
+          });
+      },
+      //Função para abrir o Dialog
+      onOpenDialog: function () {
+        const viewId = this.getView().getId();
 
-                    }).catch((oError) => {
-                        MessageBox.error(oError);
+        if (!this.dialog) {
+          this.dialog = sap.ui.xmlfragment(
+            viewId,
+            "com.lab2dev.thirdapp.view.fragments.Dialog",
+            this
+          );
+          this.getView().addDependent(this.dialog);
+        }
 
-                    }).finally(() => {
-                      list.setBusy(false);
-                    });
-            },
+        this.dialog.open();
+      },
+
+      //Função para fechar o Dialog
+      oncloseDialog: function () {
+        this.dialog.close();
+      },
     });
-    
   }
 );
